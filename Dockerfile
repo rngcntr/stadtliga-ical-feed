@@ -16,6 +16,4 @@ USER stadtliga
 
 COPY --chown=stadtliga ./src ./
 
-HEALTHCHECK --interval=10s --timeout=5s --retries=5 CMD [ "curl", "localhost:8080" ]
-
 CMD gunicorn --bind 0.0.0.0:8080 run:app
