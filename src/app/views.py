@@ -1,5 +1,6 @@
 import hashlib
 import base64
+import json
 import os
 from urllib.request import urlopen, Request
 from urllib.parse import unquote
@@ -21,6 +22,8 @@ def calendar():
     season.competition = unquote(request.args.get("competition"))
     season.league = unquote(request.args.get("league"))
     season.team = unquote(request.args.get("team"))
+
+    print(f"Requested {season.competition}/{season.league}/{season.team} by {json.dumps(request.environ)}")
 
     url = f"https://stadtliga-do.de/index.php/{season.competition}/{season.league}"
     page = urlopen(Request(url, headers={"User-Agent": "Mozilla"}))
