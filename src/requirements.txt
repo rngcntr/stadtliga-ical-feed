@@ -1,0 +1,4 @@
+gunicorn
+jinja2
+flask
+bs4
