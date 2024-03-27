@@ -31,7 +31,7 @@ DTSTART;TZID=Europe/Berlin:{{ match.start }}
 DTEND;TZID=Europe/Berlin:{{ match.end }}
 LOCATION:{{ match.address }}
 SUMMARY:{{ match.home }} vs. {{ match.away }}
-DESCRIPTION:{{ season.competition }}.{{ season.league }}
+DESCRIPTION:{{ season.identifier }}
 BEGIN:VALARM
 ACTION:DISPLAY
 TRIGGER:-PT2880M
