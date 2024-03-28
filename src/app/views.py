@@ -29,7 +29,7 @@ def competition(competition):
     if error:
         return error
     leagues = [{"link": league, "view": league.replace("-", ". ")} for league in scraper.get_leagues(home_html, competition)]
-    return templater.generate_selector("Wähle einen Liga", f"/calendar/{competition}", "/calendar", leagues)
+    return templater.generate_selector("Wähle eine Liga", f"/calendar/{competition}", "/calendar", leagues)
 
 @app.route("/calendar/<competition>/<league>", methods=["GET"], strict_slashes=False)
 def competition_league(competition, league):
