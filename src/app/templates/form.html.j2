@@ -1,0 +1,19 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="/uikit.min.css" />
+        <title>Stadtliga-Kalender</title>
+    </head>
+    <body>
+        <div class="uk-flex uk-flex-center uk-margin-top">
+            <div class="uk-width-1-4@l uk-width-1-1 uk-margin-left uk-margin-right">
+                {% if back_path -%}
+                <a class="uk-card uk-card-default uk-card-body uk-margin-top uk-button uk-button-default uk-text-large uk-padding-small" href="{{ back_path}}/">Zurück</a>
+                {% endif -%}
+                <h2 class="uk-text-center">{{ prompt }}</h2>
+                {% for option in options -%}
+                <a class="uk-card uk-card-default uk-card-body uk-margin-top uk-button uk-button-default uk-text-large uk-padding-small" href="{{ base_path}}/{{ option.link }}">{{ option.view }}</a>
+                {% endfor -%}
+            </div>
+        </div>
+    </body>
+</html>

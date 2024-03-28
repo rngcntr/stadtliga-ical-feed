@@ -16,3 +16,17 @@ def generate_calendar(season, matches, output_path):
     file = open(output_path, "w", newline="\r\n")
     file.write(output)
     file.close()
+
+def generate_selector(prompt, base_path, back_path, options):
+    file_loader = FileSystemLoader("app/templates")
+    env = Environment(loader=file_loader)
+
+    template = env.get_template("form.html.j2")
+    return template.render(prompt=prompt, base_path=base_path, back_path=back_path, options=options)
+
+def generate_link(competition, league, team):
+    file_loader = FileSystemLoader("app/templates")
+    env = Environment(loader=file_loader)
+
+    template = env.get_template("link.html.j2")
+    return template.render(competition=competition, league=league, team=team)

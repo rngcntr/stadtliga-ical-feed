@@ -1,9 +1,9 @@
-from urllib.parse import unquote
+from urllib.parse import quote
 from flask import Flask, request, send_from_directory, jsonify
-from app import app, scraper, templater, utils
+from app import app, scraper, templater, validator
 
 
-@app.route("/health", methods=["GET"])
+@app.route("/health", methods=["GET"], strict_slashes=False)
 def health():
     if scraper.health_check():
         resp = jsonify(health="healthy")
@@ -13,9 +13,43 @@ def health():
         resp.status_code = 500
     return resp
 
-@app.route("/calendar", methods=["GET"])
+@app.route("/uikit.min.css", methods=["GET"])
+def css():
+    return send_from_directory("static", "uikit.min.css")
+
+@app.route("/calendar", methods=["GET"], strict_slashes=False)
 def calendar():
-    season, league_html, error = validate(request)
+    home_html = scraper.get_home_html()
+    competitions = [{"link": competition, "view": competition} for competition in set(scraper.get_competitions(home_html))]
+    return templater.generate_selector("Wähle einen Wettbewerb", "/calendar", None, competitions)
+
+@app.route("/calendar/<competition>", methods=["GET"], strict_slashes=False)
+def competition(competition):
+    season, home_html, error = validator.validate_competition(competition)
+    if error:
+        return error
+    leagues = [{"link": league, "view": league.replace("-", ". ")} for league in scraper.get_leagues(home_html, competition)]
+    return templater.generate_selector("Wähle einen Liga", f"/calendar/{competition}", "/calendar", leagues)
+
+@app.route("/calendar/<competition>/<league>", methods=["GET"], strict_slashes=False)
+def competition_league(competition, league):
+    season, league_html, error = validator.validate_league(competition, league)
+    if error:
+        return error
+    teams = [{ "link": team, "view": team } for team in scraper.get_teams(league_html)]
+    return templater.generate_selector("Wähle ein Team", f"/calendar/{competition}/{league}", f"/calendar/{competition}", teams)
+
+@app.route("/calendar/<competition>/<league>/<team>", methods=["GET"], strict_slashes=False)
+def link_page(competition, league, team):
+    season, league_html, error = validator.validate_team(competition, league, team)
+    if error:
+        return error
+
+    return templater.generate_link(quote(competition), quote(league), quote(team))
+
+@app.route("/link/<competition>/<league>/<team>", methods=["GET"], strict_slashes=False)
+def competition_league_team(competition, league, team):
+    season, league_html, error = validator.validate_team(competition, league, team)
     if error:
         return error
 
@@ -23,26 +57,3 @@ def calendar():
     matches = scraper.get_matches(league_html, season)
     templater.generate_calendar(season, matches, "/tmp/calendar.ics")
     return send_from_directory("/tmp", "calendar.ics")
-
-def validate(request):
-    season = utils.Object()
-    season.competition = unquote(request.args.get("competition"))
-    season.league = unquote(request.args.get("league"))
-    season.team = unquote(request.args.get("team"))
-    home_html = scraper.get_home_html()
-    competitions = scraper.get_competitions(home_html)
-    if not season.competition in competitions:
-        return None, None, not_found(invalid=season.competition, allowed=list(set(competitions)))
-    leagues = scraper.get_leagues(home_html, season.competition)
-    if not season.league in leagues:
-        return None, None, not_found(invalid=season.league, allowed=list(set(leagues)))
-    league_html = scraper.get_league_html(season.competition, season.league)
-    teams = scraper.get_teams(league_html)
-    if not season.team in teams:
-        return None, None, not_found(invalid=season.team, allowed=list(set(teams)))
-    return season, league_html, None
-
-def not_found(**kwargs):
-    resp = jsonify(kwargs)
-    resp.status_code = 404
-    return resp

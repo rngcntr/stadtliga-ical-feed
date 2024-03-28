@@ -1,0 +1,17 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="/uikit.min.css" />
+        <title>Stadtliga-Kalender</title>
+    </head>
+    <body>
+        <div class="uk-flex uk-flex-center uk-margin-top">
+            <div class="uk-width-1-4@l uk-width-1-1 uk-margin-left uk-margin-right">
+                <a class="uk-card uk-card-default uk-card-body uk-margin-top uk-button uk-button-default uk-text-large uk-padding-small" href="/calendar/{{ competition }}/{{ league }}">Zurück</a>
+                <h2 class="uk-text-center">Fertig!</h2>
+                <h5 class="uk-text-center">Verwende diesen Link in deiner Kalender App</h5>
+                <input class="uk-input uk-padding-small" readonly="readonly" value="https://stadtliga.grieska.mp/link/{{ competition }}/{{ league }}/{{ team }}">
+                <a class="uk-card uk-card-default uk-card-body uk-margin-top uk-button uk-button-default uk-text-large uk-padding-small uk-padding-top" href="webcal://stadtliga.grieska.mp/calendar/{{ competition }}/{{ league }}/{{ team }}">webcal</a>
+            </div>
+        </div>
+    </body>
+</html>
