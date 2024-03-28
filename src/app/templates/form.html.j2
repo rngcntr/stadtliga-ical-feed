@@ -7,11 +7,11 @@
         <div class="uk-flex uk-flex-center uk-margin-top">
             <div class="uk-width-1-4@l uk-width-1-1 uk-margin-left uk-margin-right">
                 {% if back_path -%}
-                <a class="uk-card uk-card-default uk-card-body uk-margin-top uk-button uk-button-default uk-text-large uk-padding-small" href="{{ back_path}}/">Zurück</a>
+                <a class="uk-card uk-card-default uk-card-body uk-button uk-button-default uk-padding-small" style="font-size:2.5vh;margin-top:2vh;padding:2vh;" href="{{ back_path}}/">Zurück</a>
                 {% endif -%}
-                <h2 class="uk-text-center">{{ prompt }}</h2>
+                <h2 class="uk-text-center" style="font-size:2.5vh;margin-top:2vh;padding:2vh;">{{ prompt }}</h2>
                 {% for option in options -%}
-                <a class="uk-card uk-card-default uk-card-body uk-margin-top uk-button uk-button-default uk-text-large uk-padding-small" href="{{ base_path}}/{{ option.link }}">{{ option.view }}</a>
+                <a class="uk-card uk-card-default uk-card-body uk-button uk-button-default uk-padding-small" style="font-size:2.5vh;margin-top:2vh;padding:2vh;" href="{{ base_path}}/{{ option.link }}">{{ option.view }}</a>
                 {% endfor -%}
             </div>
         </div>

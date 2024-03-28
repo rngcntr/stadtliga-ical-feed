@@ -1,3 +1,4 @@
+from urllib.parse import quote_plus
 from datetime import datetime, timedelta
 from jinja2 import Environment, FileSystemLoader
 
@@ -28,5 +29,6 @@ def generate_link(competition, league, team):
     file_loader = FileSystemLoader("app/templates")
     env = Environment(loader=file_loader)
 
+    full_link = f"webcal://stadtliga.grieska.mp/link/{ competition }/{ league }/{ team }"
     template = env.get_template("link.html.j2")
-    return template.render(competition=competition, league=league, team=team)
+    return template.render(competition=competition, league=league, original_link=full_link, encoded_link=quote_plus(full_link))
